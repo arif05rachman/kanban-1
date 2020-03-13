@@ -7,7 +7,6 @@ module.exports = (req, res, next) =>{
   } else {
     try {
       const userToken = verifyToken(req.headers.token)
-      console.log(userToken)
       User
       .findOne({
           where:{
@@ -26,6 +25,7 @@ module.exports = (req, res, next) =>{
         next(err)
       })
     } catch (error) {
+      console.log(error)
         next(error)
     }
   }
