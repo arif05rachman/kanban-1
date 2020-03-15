@@ -10,16 +10,16 @@ import GAuth from 'vue-google-oauth2'
 import io from 'socket.io-client'
 import VueSocketIOExt from 'vue-socket.io-extended'
 const base = axios.create({
-  // baseURL: 'https://obscure-sierra-18041.herokuapp.com/'
-  baseURL: 'http://localhost:3000'
+  baseURL: 'https://obscure-sierra-18041.herokuapp.com'
+  // baseURL: 'http://localhost:3000'
 });
 const gauthOption = {
   clientId: '831032422222-1vo1hs36kr7vtu6vajsialdf5bb57ms9.apps.googleusercontent.com',
   scope: 'profile email',
   prompt: 'select_account'
 }
-const socket = io("http://localhost:3000")
-
+// const socket = io("http://localhost:3000")
+const socket = io("https://obscure-sierra-18041.herokuapp.com")
 
 Vue.use(GAuth, gauthOption)
 Vue.prototype.$axios = base;
