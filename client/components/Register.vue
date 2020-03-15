@@ -43,7 +43,8 @@
             placeholder="Enter password"
           ></b-form-input>
         </b-form-group>
-        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-spinner style="width: 2rem; height: 2rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+        <b-button type="submit" variant="primary" v-else>Submit</b-button>
       </b-form>
       <div class="mt-4 text-right">
         <a href="#" @click.prevent="callLoginPage()"><span>You already have account?</span></a>
@@ -59,7 +60,8 @@
       return {
         email: null,
         name: null,
-        password: null
+        password: null,
+        spinner: false
       }
     },
     methods: {
@@ -67,6 +69,7 @@
         this.$emit('callLoginPage')
       },
       processRegister(){
+        this.spinner = !this.spinner,
         this.$axios({
           method: 'post',
           url: '/user/register',
@@ -77,6 +80,7 @@
           }
         })
         .then(({data}) => {
+          this.spinner = !this.spinner
           localStorage.setItem('token', data.token)
           localStorage.setItem('name', data.name)
           this.$emit('logged')
@@ -87,6 +91,7 @@
           })
         })
         .catch(({response}) => {
+          this.spinner = !this.spinner
           let errorMessage = ''
           response.data.message.forEach(element => {
             errorMessage += `${element}<br>`
