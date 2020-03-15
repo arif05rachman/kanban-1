@@ -70,26 +70,28 @@ class Controller{
                 //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
             });
             const payload = ticket.getPayload();
-            // const userid = payload['sub'];
-            console.log(payload);
+            console.log(payload.email);
             User
                 .findOne({
-                    email: payload.email
+                    where: {
+                        email: payload.email
+                    }
                 })
                 .then(result => {
                     if (result) {
-                        const payload = {
+                        const payloadToken = {
                             id: result.id,
                             email: result.email
                         }
-                        const token = generateToken(payload)
+                        console.log(result.email)
+                        const token = generateToken(payloadToken)
                         res.status(200).json({
                             token,
                             name: result.name
                         })
                     } else {
                         let passGen = String(Math.floor(Math.random() * 100000))
-                        sendMail(payload, passGen)
+                        // sendMail(payload, passGen)
                         User
                             .create({
                                 email: payload.email,
