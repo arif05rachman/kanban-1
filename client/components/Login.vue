@@ -8,7 +8,8 @@
           <h3>Login</h3>
         <hr>
         <div class="d-flex flex-column align-items-center">
-          <GoogleLogin :params="params" :renderParams="renderParams" :onSuccess="onSuccess"></GoogleLogin>
+          <b-spinner style="width: 2rem; height: 2rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+          <GoogleLogin :params="params" :renderParams="renderParams" :onSuccess="onSuccess" v-else></GoogleLogin>
           <h5>Or</h5>
         </div>
         </div>
@@ -37,7 +38,10 @@
               placeholder="Enter Password"
             ></b-form-input>
           </b-form-group>
-          <b-button type="submit" variant="primary">Submit</b-button>
+        <div>
+          <b-spinner style="width: 2rem; height: 2rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+          <b-button type="submit" variant="primary" v-else>Submit</b-button>
+        </div>
         </b-form>
         <div class="mt-4 text-right">
           <a href="#" @click.prevent="callRegisterPage()"><span>You not have account?</span></a>
@@ -54,6 +58,7 @@
       return { 
         email: null,
         password: null,
+        spinner: false,
         params: {
                     client_id: "255521937375-dkbj7vrcopqel2nbdf0hkb4u5d8qc2sr.apps.googleusercontent.com"
                 },
@@ -70,9 +75,11 @@
     },
     methods: {
       callRegisterPage(){
+        this.spinner = true
         this.$emit('callRegisterPage')
       },
       processLogin(){
+        this.spinner = true
         this.$axios({
           method: 'post',
           url: '/user/login',
@@ -82,7 +89,8 @@
           }
         })
         .then(({data}) => {
-          console.log(data)
+          this.spinner = false
+          // console.log(data)
           localStorage.setItem('token', data.token)
           localStorage.setItem('name', data.name)
           this.$emit('logged', localStorage.getItem('token'))
@@ -94,7 +102,8 @@
           })
         })
         .catch(({response}) => {
-          console.log('login error')
+          this.spinner = false
+          // console.log('login error')
           let errorMessage = response.data.message
           this.$swal.fire({
             icon: 'error',
@@ -104,6 +113,7 @@
         })
       },
       onSuccess(googleUser) {
+        this.spinner = true
         var id_token = googleUser.getAuthResponse().id_token;
         this.$axios({
           method: 'post',
@@ -113,7 +123,8 @@
           }
         })
         .then(({data})=>{
-          console.log(data)
+        this.spinner = false
+          // console.log(data)
           localStorage.setItem('token', data.token)
           localStorage.setItem('name', data.name)
           this.$emit('logged', localStorage.getItem('token'))
@@ -125,6 +136,7 @@
           })
         })
         .catch(({response})=>{
+        this.spinner = false
           console.log('login error')
           let errorMessage = response.data.message
           this.$swal.fire({

@@ -1,9 +1,9 @@
 'use strict'
 const { Task, Category } = require('../models')
+
 class Controller{
   static findAll(req, res, next) {
     const id = req.user
-    console.log(req.user, 'INI REQ USER CONTROLER')
     Task
       .findAll({
         where: {
@@ -30,8 +30,8 @@ class Controller{
         UserId: id
       })
       .then(data => {
-          console.log(data)
-          res.status(201).json(data)
+        req.io.emit('reloadTask')
+        res.status(201).json(data)
       })
       .catch(err => {
         console.log(err)
@@ -54,6 +54,7 @@ class Controller{
           returning: true
       })
       .then(data => {
+        req.io.emit('reloadTask')
         console.log(data)
         res.status(200).json(data)
       })
@@ -70,7 +71,8 @@ class Controller{
           id: id
         }
       })
-      .then(data => {
+        .then(data => {
+        req.io.emit('reloadTask')
         console.log(data)
         res.status(200).json(data)
       })

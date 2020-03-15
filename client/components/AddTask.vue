@@ -47,10 +47,10 @@ export default {
             html: `${data.title}`,
             customClass: 'swal-wide',
           })
-        console.log(data)
+        // console.log(data)
       })
       .catch(({response})=>{
-        console.log(response)
+        // console.log(response)
         let errorMessage = ''
           response.data.message.forEach(element => {
             errorMessage += `${element}<br>`

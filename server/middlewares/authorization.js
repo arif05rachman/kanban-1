@@ -7,15 +7,12 @@ module.exports = (req, res, next) =>{
               id: req.params.id
           }
       })
-      .then(data => {
-        console.log(data, 'INI DATA AUTHORIZE');
-        
-        if (!data) {          
+      .then(data => {        
+        if (!data) {   
           throw {status: 404, message: 'Data Not Found'}
         } else {
           
           if (data.UserId === req.user) {
-            console.log('Masuk SINI==================================');
             next()
           } else {
           throw {status: 401, message: 'Unauthorize'}

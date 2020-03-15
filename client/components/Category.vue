@@ -44,12 +44,20 @@ export default {
       categories: [],
       }
   },
+  sockets: {
+    connect() {
+      // console.log(`Socket is connected!`);
+    },
+    reloadTask(data) {
+      this.getAllTask();
+    }
+  },
   methods: {
     processAddTask(newTask){
       this.getAllTask()
     },
     processDeleteTask(delTask){
-      console.log(delTask)
+      // console.log(delTask)
       this.getAllTask()
     },
     processMoveToLeft(moveLeft){

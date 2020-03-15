@@ -8,19 +8,23 @@
         <hr class="py-0 my-0">
           <div class="d-flex justify-content-between py-0 my-0" style="font-size: 2rem;">
             <a href="#"  class="" v-if="task.CategoryId != 1">
-              <b-icon icon="arrow-left-short" variant="info" class="border border-info rounded" @click.prevent="moveToLeft(task)">
+              <b-spinner style="width: 1rem; height: 1rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+              <b-icon icon="arrow-left-short" variant="info" class="border border-info rounded" @click.prevent="moveToLeft(task)" v-else>
               </b-icon>
             </a>
             <a href="#"  class="">
-              <b-icon icon="trash" variant="danger" class="border border-danger rounded" @click.prevent="removeTask(task)">
+              <b-spinner style="width: 1rem; height: 1rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+              <b-icon icon="trash" variant="danger" class="border border-danger rounded" @click.prevent="removeTask(task)" v-else>
               </b-icon>
             </a>
             <a href="#"  class="">
-              <b-icon icon="pencil" variant="warning" class="border border-warning rounded" @click.prevent="editTask(task)">
+              <b-spinner style="width: 1rem; height: 1rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+              <b-icon icon="pencil" variant="warning" class="border border-warning rounded" @click.prevent="editTask(task)" v-else>
               </b-icon>
             </a>
             <a href="#"  class="" v-if="task.CategoryId !== 4">
-              <b-icon icon="arrow-right-short" variant="success" class="border border-success rounded" @click.prevent="moveToRight(task)">
+              <b-spinner style="width: 1rem; height: 1rem;" label="Large Spinner" v-if="spinner"></b-spinner>
+              <b-icon icon="arrow-right-short" variant="success" class="border border-success rounded" @click.prevent="moveToRight(task)" v-else>
               </b-icon>
             </a>
           </div>
@@ -46,7 +50,7 @@
           placeholder="Enter Title"
           ></b-form-input>
         </b-form-group>
-          <b-button type="submit" variant="primary">Submit</b-button>
+          <!-- <b-button type="submit" variant="primary">Submit</b-button> -->
       </b-form>
     </b-modal>
   </div>
@@ -60,6 +64,7 @@ export default {
   props: ['tasks'],
   data() {
     return {
+      spinner: false,
       editForm: false,
       modalShow: false,
       title: '',
@@ -79,6 +84,7 @@ export default {
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.value) {
+        this.spinner = true
             this.$axios({
               method: 'delete',
               url: '/tasks/'+data.id,
@@ -87,6 +93,7 @@ export default {
               }
             })
           .then(({data})=>{
+            this.spinner = false
             this.$emit('processDeleteTask', data)
             this.$swal.fire(
               {
@@ -95,16 +102,17 @@ export default {
                 customClass: 'swal-wide',
               }
             )
-            console.log(data)
+            // console.log(data)
           })
           .catch(({response})=>{
-            console.log(response)
+            this.spinner= false
+            // console.log(response)
           })
         }
       })
     },
     moveToLeft(data){
-      console.log(data.CategoryId-1)
+      this.spinner = true
       this.$axios({
         method: 'patch',
         url: '/tasks/'+data.id,
@@ -117,13 +125,17 @@ export default {
       })
       .then(({data})=>{
         this.$emit('processMoveToLeft', data)
-        console.log(data)
+        this.spinner = false
+        
+        // console.log(data)
       })
       .catch(({response})=>{
-        console.log(response)
+        this.spinner = false
+        // console.log(response)
       })
     },
     moveToRight(data){
+      this.spinner = true
       this.$axios({
         method: 'patch',
         url: '/tasks/'+data.id,
@@ -135,14 +147,18 @@ export default {
         }
       })
       .then(({data})=>{
-        console.log(data)
+      this.spinner = false
+        // console.log(data)
         this.$emit('processMoveToRight', data)
       })
       .catch(({response})=>{
-        console.log(response)
+      this.spinner = false
+
+        // console.log(response)
       })
     },
     onEditModalOk(data){
+      this.spinner = true
       this.$axios({
         method: 'put',
         url: '/tasks/'+data.id,
@@ -155,6 +171,7 @@ export default {
         }
       })
       .then(({data})=>{
+      this.spinner = false
         this.$emit('processUpdateTask', data)
         this.$swal.fire(
           {
@@ -163,10 +180,12 @@ export default {
             customClass: 'swal-wide',
           }
         )
-        console.log(data)
+        // console.log(data)
       })
       .catch(({response})=>{
-        console.log(response)
+        this.spinner = false
+
+        // console.log(response)
       })
     },
     editTask(data){

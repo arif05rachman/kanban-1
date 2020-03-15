@@ -7,7 +7,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/src/sweetalert2.scss'
 import GAuth from 'vue-google-oauth2'
+import io from 'socket.io-client'
+import VueSocketIOExt from 'vue-socket.io-extended'
 const base = axios.create({
+  // baseURL: 'https://obscure-sierra-18041.herokuapp.com/'
   baseURL: 'http://localhost:3000'
 });
 const gauthOption = {
@@ -15,6 +18,9 @@ const gauthOption = {
   scope: 'profile email',
   prompt: 'select_account'
 }
+const socket = io("http://localhost:3000")
+
+
 Vue.use(GAuth, gauthOption)
 Vue.prototype.$axios = base;
 // Install BootstrapVue
@@ -23,6 +29,8 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 // SweetAlert
 Vue.use(VueSweetalert2);
+
+Vue.use(VueSocketIOExt, socket)
 
 new Vue({
   render: h => h(App),
