@@ -33,7 +33,7 @@
     <div v-else>
       <b-card>
         <b-card-text class="text-center text-black-50">
-          <h5>add some task</h5>
+          <h5>No Task</h5>
         </b-card-text>
       </b-card>
     </div>

@@ -9,7 +9,7 @@
           v-model="title"
           id="input-1"
           type="text"
-          placeholder="Enter Task.."
+          placeholder="add some task.."
         ></b-form-input>
       </b-form-group>
     </b-form>
@@ -39,8 +39,8 @@ export default {
         }
       })
       .then(({data})=>{
-        this.$emit('processAddTask', data)
         this.title = ''
+        this.$emit('processAddTask', data)
         this.$swal.fire({
             icon: 'success',
             title: 'Add data Successfully',
